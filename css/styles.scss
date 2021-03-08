@@ -54,7 +54,6 @@ body.qb-dragging {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.25;
-  margin: 1rem;
 }
 
 .query-builder.qb-dragging {
@@ -66,12 +65,12 @@ body.qb-dragging {
 }
 
 .group {
-  background: rgba(250, 240, 210, 0.5);
-  border: 1px solid #DCC896;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #aaa;
 }
 
 .rule {
-  background-color: white;
+  background-color: #f3f2f2;
   border: 1px solid transparent;
   padding: 10px;
 }

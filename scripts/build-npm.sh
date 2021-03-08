@@ -1,5 +1,6 @@
 rm -rf build/npm
 babel -d build/npm/lib ./modules
+node-sass css/ -o lib/css/ --output-style compressed
 cp README.md build/npm
 cp CONFIG.adoc build/npm
 find build/npm/lib -type d -name __tests__ | xargs rm -rf
