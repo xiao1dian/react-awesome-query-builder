@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {useOnPropsChanged, mapListValues, calcTextWidth, SELECT_WIDTH_OFFSET_RIGHT} from '../../../utils/stuff';
-import { Select } from 'antd';
+import SuperSelect  from 'antd-virtual-select';
+
+import {Select} from 'antd';
 const Option = Select.Option;
 
-// import SuperSelect from 'antd-virtual-select';
-// const Option = SuperSelect.Option;
-
-export default class SelectWidget extends PureComponent {
+export default class SuperSelectWidget extends PureComponent {
   static propTypes = {
     setValue: PropTypes.func.isRequired,
     config: PropTypes.object.isRequired,
@@ -57,11 +56,11 @@ export default class SelectWidget extends PureComponent {
     const _value = value != undefined ? value : undefined;
 
     return (
-        <Select
+        <SuperSelect
             disabled={readonly}
             style={{ width }}
             key={"widget-select"}
-            dropdownMatchSelectWidth={false}
+            dropdownMatchSelectWidth={true}
             ref="val"
             placeholder={placeholder}
             size={renderSize}
@@ -70,7 +69,7 @@ export default class SelectWidget extends PureComponent {
             filterOption={this.filterOption}
             {...customProps}
           >{this.options}
-        </Select>
+        </SuperSelect>
     );
   }
 }

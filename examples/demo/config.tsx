@@ -4,7 +4,7 @@ import {
     Widgets, BasicConfig,
     // types:
     Operators, Fields, Config, Types, Conjunctions, Settings, LocaleSettings, OperatorProximity, Funcs,
-} from 'react-awesome-query-builder';
+} from 'xiao-react-awesome-query-builder';
 import en_US from 'antd/lib/locale-provider/en_US';
 import ru_RU from 'antd/lib/locale-provider/ru_RU';
 const {
@@ -136,6 +136,14 @@ const types: Types = {
     }),
 };
 
+const dummyHugeList = () => {
+    let ret = [];
+    for (let i = 0; i < 3000;i ++) {
+        ret.push("ac"+i);
+    }
+    console.log(ret)
+    return ret;
+}
 
 const localeSettings: LocaleSettings = {
     locale: {
@@ -231,6 +239,23 @@ const fields: Fields = {
                 },
             }
         }
+    },
+
+    testWithSuperSelect: {
+        type: 'superselect',
+        listValues: dummyHugeList(),
+        valueSources: ['value']
+    },
+
+    testWithSearchText: {
+        type: 'searchtext',
+        fieldSettings: {
+            url: "http://segment-meta-service.staging.hulu.com/v1/KR/segments/pattern?limit=1000&segmentPattern={0}"
+        },
+        mainWidgetProps: {
+            valueLabel: "Name",
+            valuePlaceholder: "Enter name"
+        },
     },
     results: {
         label: 'Results',
@@ -360,11 +385,11 @@ const fields: Fields = {
             // * deep format (will be auto converted to flat format):
             // listValues: [
             //     { value: "1", title: "Warm colors", children: [
-            //         { value: "2", title: "Red" }, 
+            //         { value: "2", title: "Red" },
             //         { value: "3", title: "Orange" }
             //     ] },
             //     { value: "4", title: "Cool colors", children: [
-            //         { value: "5", title: "Green" }, 
+            //         { value: "5", title: "Green" },
             //         { value: "6", title: "Blue", children: [
             //             { value: "7", title: "Sub blue", children: [
             //                 { value: "8", title: "Sub sub blue and a long text" }
@@ -392,11 +417,11 @@ const fields: Fields = {
             treeExpandAll: true,
             listValues: [
                 { value: "1", title: "Warm colors", children: [
-                    { value: "2", title: "Red" }, 
+                    { value: "2", title: "Red" },
                     { value: "3", title: "Orange" }
                 ] },
                 { value: "4", title: "Cool colors", children: [
-                    { value: "5", title: "Green" }, 
+                    { value: "5", title: "Green" },
                     { value: "6", title: "Blue", children: [
                         { value: "7", title: "Sub blue", children: [
                             { value: "8", title: "Sub sub blue and a long text" }

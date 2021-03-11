@@ -180,13 +180,15 @@ export interface FieldWidget {
 };
 
 export type TextWidget = BaseWidget & BasicFieldSettings;
+export type SearchTextWidget = BaseWidget & BasicFieldSettings & SearchTextFieldSettings;
 export type DateTimeWidget = RangeableWidget & DateTimeFieldSettings;
 export type BooleanWidget = BaseWidget & BooleanFieldSettings;
 export type NumberWidget = RangeableWidget & NumberFieldSettings;
 export type SelectWidget = BaseWidget & SelectFieldSettings;
+export type SuperSelectWidget = BaseWidget & SelectFieldSettings;
 export type TreeSelectWidget = BaseWidget & TreeSelectFieldSettings;
 
-export type Widget = FieldWidget |  TextWidget | DateTimeWidget | BooleanWidget | NumberWidget | SelectWidget | TreeSelectWidget  | RangeableWidget | BaseWidget;
+export type Widget = FieldWidget | TextWidget | SearchTextWidget | DateTimeWidget | BooleanWidget | NumberWidget | SelectWidget | SuperSelectWidget | TreeSelectWidget  | RangeableWidget | BaseWidget;
 export type Widgets = TypedMap<Widget>;
 
 
@@ -310,6 +312,11 @@ type ListValues = TypedMap<String> | Array<ListItem> | Array<String>;
 
 interface BasicFieldSettings {
 }
+
+interface SearchTextFieldSettings extends BasicFieldSettings {
+  url?: String
+};
+
 interface NumberFieldSettings extends BasicFieldSettings {
   min?: Number,
   max?: Number,
@@ -356,7 +363,7 @@ interface ValueField extends BaseField {
   hideForCompare?: Boolean,
   //obsolete - moved to FieldSettings
   listValues?: ListValues,
-  allowCustomValues?: Boolean,
+  allowCustomValues?: Boolean
 };
 interface SimpleField extends ValueField {
   label2?: String,
@@ -383,12 +390,12 @@ export type Fields = TypedMap<FieldOrGroup>;
 /////////////////
 
 export type FieldItem = {
-  items?: FieldItems, 
-  key: String, 
-  path?: String, 
-  label: String, 
-  fullLabel?: String, 
-  altLabel?: String, 
+  items?: FieldItems,
+  key: String,
+  path?: String,
+  label: String,
+  fullLabel?: String,
+  altLabel?: String,
   tooltip?: String
 };
 type FieldItems = TypedMap<FieldItem>;
@@ -569,10 +576,13 @@ export interface BasicConfig extends Config {
   },
   widgets: {
     text: TextWidget,
+    searchtext: SearchTextWidget,
+
     number: NumberWidget,
     slider: NumberWidget,
     rangeslider: NumberWidget,
     select: SelectWidget,
+    superselect: SuperSelectWidget,
     multiselect: SelectWidget,
     treeselect: TreeSelectWidget,
     treemultiselect: TreeSelectWidget,
@@ -585,11 +595,14 @@ export interface BasicConfig extends Config {
   },
   types: {
     text: Type,
+    searchtext: Type,
+
     number: Type,
     date: Type,
     time: Type,
     datetime: Type,
     select: Type,
+    superselect: Type,
     multiselect: Type,
     treeselect: Type,
     treemultiselect: Type,
@@ -615,10 +628,14 @@ interface ReadyWidgets {
   FuncWidget: ElementType<WidgetProps>,
 
   TextWidget: ElementType<TextWidgetProps>,
+  SearchTextWidget: ElementType<TextWidgetProps>,
+
   NumberWidget: ElementType<NumberWidgetProps>,
   SliderWidget: ElementType<NumberWidgetProps>,
   RangeWidget: ElementType<RangeSliderWidgetProps>,
   SelectWidget: ElementType<SelectWidgetProps>,
+  SuperSelectWidget: ElementType<SelectWidgetProps>,
+
   MultiSelectWidget: ElementType<SelectWidgetProps>,
   TreeSelectWidget: ElementType<TreeSelectWidgetProps>,
   DateWidget: ElementType<DateTimeWidgetProps>,

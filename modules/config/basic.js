@@ -21,7 +21,10 @@ const {
 
     ValueFieldWidget,
 
-    FuncWidget
+    FuncWidget,
+
+    SuperSelectWidget,
+    SearchTextWidget
 } = Widgets;
 const { ProximityOperator } = Operators;
 
@@ -70,13 +73,13 @@ const mongoFormatOp1 = (mop, mc, not,  field, _op, value, useExpr) => {
         return undefined;
     if (not) {
         return !useExpr
-            ? { [field]: { "$not": { [mop]: mv } } } 
+            ? { [field]: { "$not": { [mop]: mv } } }
             : { "$not": { [mop]: ["$"+field, mv] } };
     } else {
         if (!useExpr && mop == '$eq')
             return { [field]: mv }; // short form
         return !useExpr
-            ? { [field]: { [mop]: mv } } 
+            ? { [field]: { [mop]: mv } }
             : { [mop]: ["$"+field, mv] };
     }
 };
@@ -84,7 +87,7 @@ const mongoFormatOp1 = (mop, mc, not,  field, _op, value, useExpr) => {
 const mongoFormatOp2 = (mops, not,  field, _op, values, useExpr) => {
     if (not) {
         return !useExpr
-            ? { [field]: { '$not': { [mops[0]]: values[0], [mops[1]]: values[1] } } } 
+            ? { [field]: { '$not': { [mops[0]]: values[0], [mops[1]]: values[1] } } }
             : {'$not':
                 {'$and': [
                     { [mops[0]]: [ "$"+field, values[0] ] },
@@ -93,7 +96,7 @@ const mongoFormatOp2 = (mops, not,  field, _op, values, useExpr) => {
               };
     } else {
         return !useExpr
-            ? { [field]: { [mops[0]]: values[0], [mops[1]]: values[1] } } 
+            ? { [field]: { [mops[0]]: values[0], [mops[1]]: values[1] } }
             : {'$and': [
                 { [mops[0]]: [ "$"+field, values[0] ] },
                 { [mops[1]]: [ "$"+field, values[1] ] },
@@ -457,6 +460,21 @@ const widgets = {
           return (op == 'like' || op == 'not_like') ? SqlString.escapeLike(val) : SqlString.escape(val);
       },
   },
+
+    searchtext: {
+        type: "searchtext",
+        jsType: "string",
+        valueSrc: 'value',
+        valueLabel: "String",
+        valuePlaceholder: "Enter string",
+        factory: (props) => <SearchTextWidget {...props} />,
+        formatValue: (val, fieldDef, wgtDef, isForDisplay) => {
+            return isForDisplay ? '"' + val + '"' : JSON.stringify(val);
+        },
+        sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
+            return (op == 'like' || op == 'not_like') ? SqlString.escapeLike(val) : SqlString.escape(val);
+        },
+    },
   number: {
       type: "number",
       jsType: "number",
@@ -513,6 +531,22 @@ const widgets = {
       jsType: "string",
       valueSrc: 'value',
       factory: (props) => <SelectWidget {...props} />,
+      valueLabel: "Value",
+      valuePlaceholder: "Select value",
+      formatValue: (val, fieldDef, wgtDef, isForDisplay) => {
+          let valLabel = getTitleInListValues(fieldDef.fieldSettings.listValues, val);
+          return isForDisplay ? '"' + valLabel + '"' : JSON.stringify(val);
+      },
+      sqlFormatValue: (val, fieldDef, wgtDef, op, opDef) => {
+          return SqlString.escape(val);
+      },
+  },
+
+  superselect: {
+      type: "superselect",
+      jsType: "string",
+      valueSrc: 'value',
+      factory: (props) => <SuperSelectWidget {...props} />,
       valueLabel: "Value",
       valuePlaceholder: "Select value",
       formatValue: (val, fieldDef, wgtDef, isForDisplay) => {
@@ -712,6 +746,33 @@ const types = {
           }
       },
   },
+
+    searchtext: {
+        defaultOperator: 'equal',
+        widgets: {
+            searchtext: {
+                operators: [
+                    'equal',
+                    'not_equal',
+                    'is_empty',
+                    'is_not_empty',
+                    'like',
+                    'not_like',
+                    'proximity'
+                ],
+                widgetProps: {},
+                opProps: {},
+            },
+            field: {
+                operators: [
+                    //unary ops (like `is_empty`) will be excluded anyway, see getWidgetsForFieldOp()
+                    'equal',
+                    'not_equal',
+                    'proximity', //can exclude if you want
+                ],
+            }
+        },
+    },
   number: {
       defaultOperator: 'equal',
       mainWidget: 'number',
@@ -832,6 +893,25 @@ const types = {
           },
       },
   },
+
+  superselect: {
+      mainWidget: "superselect",
+      defaultOperator: 'select_equals',
+      widgets: {
+          superselect: {
+              operators: [
+                  'select_equals',
+                  'select_not_equals'
+              ],
+              widgetProps: {
+                  customProps: {
+                      showSearch: true
+                  }
+              },
+          }
+      },
+  },
+
   multiselect: {
       defaultOperator: 'multiselect_equals',
       widgets: {

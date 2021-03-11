@@ -27,7 +27,7 @@ export const calcTextWidth = function(str, fontFamily = DEFAULT_FONT_FAMILY, fon
   var div = document.createElement("div");
   div.innerHTML = str;
   var css = {
-    'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 
+    'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden',
     'font-size': fontSize, 'font-family': fontFamily
   };
   for (let k in css) {
@@ -42,8 +42,8 @@ export const calcTextWidth = function(str, fontFamily = DEFAULT_FONT_FAMILY, fon
 export const truncateString = (str, n, useWordBoundary) => {
     if (!n || str.length <= n) { return str; }
     var subString = str.substr(0, n-1);
-    return (useWordBoundary 
-       ? subString.substr(0, subString.lastIndexOf(' ')) 
+    return (useWordBoundary
+       ? subString.substr(0, subString.lastIndexOf(' '))
        : subString) + "...";
 }
 
@@ -211,7 +211,7 @@ const listValuesToArray = (listValuesObj) => {
     return listValuesObj;
   if (Array.isArray(listValuesObj))
     return listValuesObj.map(v => listValue(v));
-  
+
   let listValuesArr = [];
   for (let v in listValuesObj) {
     const title = listValuesObj[v];
@@ -290,7 +290,7 @@ export const flatizeTreeData = (treeData) => {
       _flatize(c, treeData, 1);
     }
   }
-  
+
   return treeData;
 };
 
@@ -332,4 +332,3 @@ export const normalizeListValues = (listValues, type, fieldSettings) => {
   }
   return listValues;
 };
-
