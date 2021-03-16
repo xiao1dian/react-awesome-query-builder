@@ -28,7 +28,7 @@ export default class SearchTextWidget extends PureComponent {
   constructor(props) {
     super(props);
     const { url } = this.props;
-    this.optionsMaxWidth = 100;
+    this.optionsMaxWidth = 0;
     this.url = url;
     this.timeout =null;
     this.currentValue = '';
@@ -87,8 +87,8 @@ export default class SearchTextWidget extends PureComponent {
     const {config, placeholder, customProps, value, readonly} = this.props;
     const {renderSize} = config.settings;
     const placeholderWidth = calcTextWidth(placeholder);
-    const dropdownWidth = this.optionsMaxWidth === 0 ?  placeholderWidth : this.optionsMaxWidth + SELECT_WIDTH_OFFSET_RIGHT;
-    const width = value ? dropdownWidth : placeholderWidth + SELECT_WIDTH_OFFSET_RIGHT;
+    const dropdownWidth = this.optionsMaxWidth === 0 ?  placeholderWidth + SELECT_WIDTH_OFFSET_RIGHT : Math.min(this.optionsMaxWidth + SELECT_WIDTH_OFFSET_RIGHT,500);
+    const width = value ? Math.max(dropdownWidth, Math.min(calcTextWidth(value, null) + SELECT_WIDTH_OFFSET_RIGHT, 500)) : placeholderWidth + SELECT_WIDTH_OFFSET_RIGHT;
     const _value = value != undefined ? value : undefined;
     const latestOptions = this.state.data.map((d) => (
         <Option key={d.value}>{d.text}</Option>

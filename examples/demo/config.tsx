@@ -138,7 +138,7 @@ const types: Types = {
 
 const dummyHugeList = () => {
     let ret = [];
-    for (let i = 0; i < 3000;i ++) {
+    for (let i = 0; i < 1000;i ++) {
         ret.push("ac"+i);
     }
     console.log(ret)
